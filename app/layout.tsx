@@ -13,9 +13,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SweetLar Moçambique",
+  title: {
+    default: "SweetLar Moçambique",
+    template: "%s | SweetLar Moçambique",
+  },
   description: "Móveis sob medida, sofás, camas e decoração em Moçambique.",
   keywords: ["móveis", "sofás", "camas", "SweetLar", "Moçambique"],
+  metadataBase: new URL("https://sweetlar.co.mz"),
+  openGraph: {
+    title: "SweetLar Moçambique",
+    description: "Móveis sob medida, sofás, camas e decoração em Moçambique.",
+    type: "website",
+    locale: "pt_MZ",
+    siteName: "SweetLar Moçambique",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SweetLar Moçambique",
+    description: "Móveis sob medida, sofás, camas e decoração em Moçambique.",
+  },
 };
 
 export default function RootLayout({
@@ -25,10 +41,12 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="pt"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-screen flex flex-col bg-white text-zinc-900">
+        <main className="flex-1">{children}</main>
+      </body>
     </html>
   );
 }
