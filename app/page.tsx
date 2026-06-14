@@ -1315,7 +1315,7 @@ export default function Home() {
         <div className="border-t border-zinc-800 py-6">
           <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 text-xs text-zinc-600 sm:flex-row sm:px-6 lg:px-8">
             <span>
-              © 2026 Soluções Digitais Moçambique. Todos os direitos reservados.
+              © 2026 SoluçõesMoçambique. Todos os direitos reservados.
             </span>
             <div className="flex gap-4">
               {REDES_SOCIAIS.map((rede) => (

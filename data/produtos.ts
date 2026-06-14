@@ -21,7 +21,7 @@ export const PRODUTOS_DATABASE: Produto[] = [
     nome: "Cama King Size Premium",
     categoria: "Camas",
     precoMinimo: "19.000,00 MT",
-    imagemPadrao: "/cama-cinza.png",
+    imagemPadrao: "/cama-preto.png",
     ref: "SL_C1",
     cores: ["Branco", "Cinza", "Preto"],
     tag: "Mais Vendido",
@@ -38,7 +38,7 @@ export const PRODUTOS_DATABASE: Produto[] = [
     nome: "Cama Casal Premium",
     categoria: "Camas",
     precoMinimo: "15.000,00 MT",
-    imagemPadrao: "/cama-cinza.png",
+    imagemPadrao: "/cama-branco.png",
     ref: "SL_C2",
     cores: ["Branco", "Cinza", "Preto"],
     tag: "Mais Vendido",
@@ -133,31 +133,28 @@ export const PRODUTOS_DATABASE: Produto[] = [
     id: 8,
     nome: "MESA DE CABECEIRA 2GAV BELFAST COR ITAUBA AMBER+BR GLOSS",
     categoria: "Cabeceiras",
-    precoMinimo: "5.190,00 MT",
-    imagemPadrao:
-      "https://images.unsplash.com/photo-1532372320978-9b4d6a3a854c?q=80&w=600&auto=format&fit=crop",
+    precoMinimo: 5190.0, // Alterado para Number
+    imagemPadrao: "/cabeceiras.png", // Corrigida a barra
     ref: "L2400XA2200XP608",
     cores: ["Branco", "Cinza", "Preto"],
     tag: "Novo",
     descricao:
-      "Mesa de cabeceira com 2 gavetas, acabamento em itauba amber+br gloss.",
+      "Equipada com 2 gavetas espaçosas, ideais para manter os seus itens pessoais, livros e carregadores sempre à mão e organizados.",
     medidas: "40cm x 35cm x 55cm",
     material: "Madeira maciça com acabamento gloss",
     avaliacoes: 22,
-    nota: 4.6,
+    nota: 4.6, // Vírgula removida daqui
   },
   {
     id: 9,
-    nome: "MESA DE CABECEIRA 2GAV ITALIA COR ITAUBA AMBAR + MARMO",
+    nome: "Mesa de Cabeceira Skyline",
     categoria: "Cabeceiras",
-    precoMinimo: "8.190,00 MT",
-    imagemPadrao:
-      "https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=600&auto=format&fit=crop",
+    precoMinimo: "6.500,00 MT",
+    imagemPadrao: "/cab.png",
     ref: "L570XA599XP405",
     cores: ["Branco", "Mármore"],
     tag: "Novo",
-    descricao:
-      "Mesa de cabeceira Italia com acabamento em itauba ambar + mármore.",
+    descricao: "1 nicho aberto + 2 gavetgit initas amplas.",
     medidas: "57cm x 60cm x 40cm",
     material: "Madeira com acabamento em mármore",
     avaliacoes: 18,
