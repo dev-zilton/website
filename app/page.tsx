@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import { type MouseEvent, useMemo, useState } from "react";
 import { PRODUTOS_DATABASE, type Produto } from "@/data/produtos";
@@ -240,9 +241,6 @@ const getCarrinhoItemKey = (item: CarrinhoItem) =>
 const money = (value: number) =>
   `${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })} MT`;
 
-// ─── FIX 1: CardProduto e MenuSecoes movidos para FORA do componente Home ────
-// Recebem as props necessárias para não depender de closures do render pai.
-
 type CardProdutoProps = {
   item: Produto;
   favoritos: number[];
@@ -351,8 +349,6 @@ const MenuSecoes = ({ categoriaAtiva, onSelecionar }: MenuSecoesProps) => (
     ))}
   </div>
 );
-
-// ─── FIX 2: PaginaHome movida para FORA do componente Home ───────────────────
 
 type PaginaHomeProps = {
   buscaTermo: string;
@@ -467,6 +463,7 @@ const PaginaHome = ({
             className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 focus:border-sky-500 focus:outline-none sm:w-96"
           />
         </div>
+
         <MenuSecoes
           categoriaAtiva={categoriaAtiva}
           onSelecionar={(cat) => {
@@ -474,6 +471,7 @@ const PaginaHome = ({
             setProdutoSelecionadoId(null);
           }}
         />
+
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {produtosFiltrados.map((item) => (
             <CardProduto
@@ -654,8 +652,6 @@ const PaginaHome = ({
   </>
 );
 
-// ─── Componente principal ─────────────────────────────────────────────────────
-
 export default function Home() {
   const [categoriaAtiva, setCategoriaAtiva] =
     useState<(typeof CATEGORIAS)[number]>("Todos");
@@ -664,20 +660,20 @@ export default function Home() {
   >(null);
   const [buscaTermo, setBuscaTermo] = useState("");
 
-  // ─── FIX 3: lazy initializers no lugar de useEffect + setState ───────────
+  // ✅ Initializer functions: lêem o localStorage apenas uma vez, no cliente,
+  // sem precisar de useEffect nem setState dentro de efeito.
   const [favoritos, setFavoritos] = useState<number[]>(() => {
+    if (typeof window === "undefined") return [];
     try {
       const saved = localStorage.getItem("sweetlar-favorites");
-      const parsed = JSON.parse(saved ?? "[]");
-      return Array.isArray(parsed)
-        ? parsed.filter((n) => typeof n === "number")
-        : [];
+      return saved ? (JSON.parse(saved) as number[]) : [];
     } catch {
       return [];
     }
   });
 
   const [carrinho, setCarrinho] = useState<CarrinhoItem[]>(() => {
+    if (typeof window === "undefined") return [];
     try {
       const saved = localStorage.getItem("sweetlar-cart");
       return saved ? normalizarCarrinhoSalvo(JSON.parse(saved)) : [];
@@ -685,7 +681,6 @@ export default function Home() {
       return [];
     }
   });
-  // ─────────────────────────────────────────────────────────────────────────
 
   const [quantidade, setQuantidade] = useState(1);
   const [tamanhoSelecionado, setTamanhoSelecionado] =
@@ -699,13 +694,13 @@ export default function Home() {
   const [lupaAtiva, setLupaAtiva] = useState(false);
   const [lupaPosicao, setLupaPosicao] = useState({ x: 50, y: 50 });
 
-  // Persiste no localStorage sempre que o estado mudar
   const setCarrinhoComPersistencia = (
     updater: CarrinhoItem[] | ((prev: CarrinhoItem[]) => CarrinhoItem[]),
   ) => {
     setCarrinho((prev) => {
       const next = typeof updater === "function" ? updater(prev) : updater;
-      localStorage.setItem("sweetlar-cart", JSON.stringify(next));
+      if (typeof window !== "undefined")
+        localStorage.setItem("sweetlar-cart", JSON.stringify(next));
       return next;
     });
   };
@@ -715,7 +710,8 @@ export default function Home() {
   ) => {
     setFavoritos((prev) => {
       const next = typeof updater === "function" ? updater(prev) : updater;
-      localStorage.setItem("sweetlar-favorites", JSON.stringify(next));
+      if (typeof window !== "undefined")
+        localStorage.setItem("sweetlar-favorites", JSON.stringify(next));
       return next;
     });
   };
@@ -874,6 +870,7 @@ export default function Home() {
           >
             <span className="text-sky-500">Sweet</span>Lar
           </button>
+
           <div className="hidden max-w-xl flex-1 px-4 md:flex">
             <input
               value={buscaTermo}
@@ -882,8 +879,8 @@ export default function Home() {
               className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 focus:border-sky-500 focus:outline-none"
             />
           </div>
+
           <div className="flex items-center gap-3 text-sm">
-            {/* Ícones sociais — visíveis apenas em desktop */}
             <div className="hidden items-center gap-2 lg:flex">
               {REDES_SOCIAIS.map((rede) => (
                 <a
@@ -1096,6 +1093,7 @@ export default function Home() {
                       +
                     </button>
                   </div>
+
                   <button
                     type="button"
                     onClick={adicionarCarrinho}
@@ -1103,6 +1101,7 @@ export default function Home() {
                   >
                     Adicionar ao carrinho
                   </button>
+
                   <a
                     href={`https://wa.me/${WHATSAPP_NUMERO}?text=${whatsappMensagem}`}
                     target="_blank"
@@ -1228,10 +1227,8 @@ export default function Home() {
       </aside>
 
       <footer className="mt-16 border-t border-zinc-100 bg-zinc-950 text-white">
-        {/* Bloco principal */}
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
-            {/* Marca */}
             <div className="lg:col-span-2">
               <p className="mb-3 text-2xl font-black tracking-tight">
                 <span className="text-sky-400">Sweet</span>Lar
@@ -1240,7 +1237,6 @@ export default function Home() {
                 Móveis sob medida de alto padrão para transformar a sua casa.
                 Fabricamos e entregamos em todo Moçambique.
               </p>
-              {/* Redes sociais */}
               <div className="flex gap-3">
                 {REDES_SOCIAIS.map((rede) => (
                   <a
@@ -1257,7 +1253,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Links rápidos */}
             <div>
               <h4 className="mb-4 text-xs font-bold uppercase tracking-widest text-zinc-500">
                 Produtos
@@ -1281,7 +1276,6 @@ export default function Home() {
               </ul>
             </div>
 
-            {/* Contacto */}
             <div>
               <h4 className="mb-4 text-xs font-bold uppercase tracking-widest text-zinc-500">
                 Contacto
@@ -1311,7 +1305,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Barra de copyright */}
         <div className="border-t border-zinc-800 py-6">
           <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 text-xs text-zinc-600 sm:flex-row sm:px-6 lg:px-8">
             <span>
