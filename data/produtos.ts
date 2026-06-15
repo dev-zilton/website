@@ -2,7 +2,7 @@ export type Produto = {
   id: number;
   nome: string;
   categoria: string;
-  precoMinimo: string;
+  precoMinimo: number | string;
   imagemPadrao: string;
   ref: string;
   cores: string[];
