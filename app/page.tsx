@@ -226,7 +226,7 @@ const normalizarCarrinhoSalvo = (value: unknown): CarrinhoItem[] => {
         preco:
           typeof cartItem.preco === "number" && cartItem.preco > 0
             ? cartItem.preco
-            : parsePrecoProduto(produto.precoMinimo),
+            : parsePrecoProduto(String(produto.precoMinimo)),
         tamanho: cartItem.tamanho ?? "",
         cor: cartItem.cor ?? "",
         tipo: cartItem.tipo ?? "",
@@ -809,7 +809,7 @@ export default function Home() {
       preco:
         produtoAtual.categoria === "Camas"
           ? calcularPrecoCama()
-          : parsePrecoProduto(produtoAtual.precoMinimo),
+          : parsePrecoProduto(String(produtoAtual.precoMinimo)),
       tamanho: produtoAtual.categoria === "Camas" ? tamanhoSelecionado : "",
       cor: corSelecionada,
       tipo: produtoAtual.categoria === "Camas" ? tipoSelecionado : "",
