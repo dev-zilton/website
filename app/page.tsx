@@ -200,9 +200,9 @@ type CarrinhoItem = {
   tipo: string;
 };
 
-const parsePrecoProduto = (preco: string) =>
+const parsePrecoProduto = (preco: number | string) =>
   Number(
-    preco
+    String(preco)
       .replace(/\./g, "")
       .replace(",", ".")
       .replace(/[^\d.]/g, ""),
@@ -809,7 +809,7 @@ export default function Home() {
       preco:
         produtoAtual.categoria === "Camas"
           ? calcularPrecoCama()
-          : parsePrecoProduto(String(produtoAtual.precoMinimo)),
+          : parsePrecoProduto(Number(produtoAtual.precoMinimo)),
       tamanho: produtoAtual.categoria === "Camas" ? tamanhoSelecionado : "",
       cor: corSelecionada,
       tipo: produtoAtual.categoria === "Camas" ? tipoSelecionado : "",
