@@ -390,6 +390,7 @@ const PaginaHome = ({
           sizes="100vw"
           className="object-cover"
           priority
+          fetchPriority="high"
         />
       </div>
       <div className="relative z-20 mx-auto max-w-7xl px-4 py-20">
