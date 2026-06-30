@@ -30,5 +30,12 @@
     "trailingComma": "all",
     "printWidth": 80,
     "bracketSpacing": true
-  }
+  },
+  "browserslist": [
+    "chrome >= 100",
+    "edge >= 100",
+    "firefox >= 100",
+    "safari >= 15",
+    "not dead"
+  ]
 }
