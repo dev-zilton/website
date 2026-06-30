@@ -263,7 +263,7 @@ const CardProduto = ({
         src={item.imagemPadrao}
         alt={item.nome}
         fill
-        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 384px"
         className="object-contain p-4 transition-transform duration-300 group-hover:scale-105"
       />
       <button
