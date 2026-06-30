@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { type MouseEvent, useMemo, useState } from 'react';
+import { type MouseEvent, useMemo, useRef, useState } from 'react';
 import { PRODUTOS_DATABASE, type Produto } from '@/data/produtos';
 
 const FOTOS_CAMA_POR_COR: Record<string, string> = {
@@ -695,6 +695,7 @@ export default function Home() {
   const [imagemExibida, setImagemExibida] = useState('');
   const [lupaAtiva, setLupaAtiva] = useState(false);
   const [lupaPosicao, setLupaPosicao] = useState({ x: 50, y: 50 });
+  const lupaRectRef = useRef<DOMRect | null>(null);
 
   const setCarrinhoComPersistencia = (
     updater: CarrinhoItem[] | ((prev: CarrinhoItem[]) => CarrinhoItem[]),
@@ -769,8 +770,14 @@ export default function Home() {
     }
   };
 
+  const capturarRectLupa = (event: MouseEvent<HTMLDivElement>) => {
+    lupaRectRef.current = event.currentTarget.getBoundingClientRect();
+    setLupaAtiva(true);
+  };
+
   const atualizarLupa = (event: MouseEvent<HTMLDivElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
+    const rect = lupaRectRef.current;
+    if (!rect) return;
     const x = ((event.clientX - rect.left) / rect.width) * 100;
     const y = ((event.clientY - rect.top) / rect.height) * 100;
     setLupaPosicao({
@@ -928,7 +935,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 items-start gap-12 rounded-3xl border border-zinc-100 bg-white p-6 shadow-sm lg:grid-cols-2 sm:p-10">
             <div
-              onMouseEnter={() => setLupaAtiva(true)}
+              onMouseEnter={capturarRectLupa}
               onMouseLeave={() => setLupaAtiva(false)}
               onMouseMove={atualizarLupa}
               className="relative flex min-h-87.5 cursor-zoom-in items-center justify-center overflow-hidden rounded-2xl border border-zinc-100 bg-zinc-50 p-6 lg:min-h-112.5"
