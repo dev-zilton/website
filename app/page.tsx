@@ -1,161 +1,161 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { type MouseEvent, useMemo, useState } from "react";
-import { PRODUTOS_DATABASE, type Produto } from "@/data/produtos";
+import Image from 'next/image';
+import { type MouseEvent, useMemo, useState } from 'react';
+import { PRODUTOS_DATABASE, type Produto } from '@/data/produtos';
 
 const FOTOS_CAMA_POR_COR: Record<string, string> = {
-  Branco: "/cama-branco.png",
-  Cinza: "/cama-cinza.png",
-  Preto: "/cama-preto.png",
+  Branco: '/cama-branco.png',
+  Cinza: '/cama-cinza.png',
+  Preto: '/cama-preto.png',
 };
 
 const TABELA_PRECOS_CAMAS = {
-  tamanhos: ["Casal", "Queen", "King normal", "King size"] as const,
+  tamanhos: ['Casal', 'Queen', 'King normal', 'King size'] as const,
   componentes: {
-    "Base e encosto": {
+    'Base e encosto': {
       Casal: 19000,
       Queen: 22000,
-      "King normal": 26000,
-      "King size": 32000,
+      'King normal': 26000,
+      'King size': 32000,
     },
-    "Base somente": {
+    'Base somente': {
       Casal: 9000,
       Queen: 11000,
-      "King normal": 14000,
-      "King size": 18000,
+      'King normal': 14000,
+      'King size': 18000,
     },
-    "Encosto somente": {
+    'Encosto somente': {
       Casal: 10000,
       Queen: 12000,
-      "King normal": 15000,
-      "King size": 18000,
+      'King normal': 15000,
+      'King size': 18000,
     },
   },
   cabeceiras: 7000,
   colchoes: {
     Casal: 10000,
     Queen: 12000,
-    "King normal": 14000,
-    "King size": 16000,
+    'King normal': 14000,
+    'King size': 16000,
   },
 };
 
 const CATEGORIAS = [
-  "Todos",
-  "Camas",
-  "Sofás",
-  "Cabeceiras",
-  "Cadeiras",
+  'Todos',
+  'Camas',
+  'Sofás',
+  'Cabeceiras',
+  'Cadeiras',
 ] as const;
 
 const POR_QUE = [
   {
-    icon: "🏠",
-    titulo: "Móveis sob medida",
-    texto: "Personalizados para o seu espaço.",
+    icon: '🏠',
+    titulo: 'Móveis sob medida',
+    texto: 'Personalizados para o seu espaço.',
   },
   {
-    icon: "🚚",
-    titulo: "Entrega em Moçambique",
-    texto: "Levamos até si com segurança.",
+    icon: '🚚',
+    titulo: 'Entrega em Moçambique',
+    texto: 'Levamos até si com segurança.',
   },
   {
-    icon: "⭐",
-    titulo: "Garantia de qualidade",
-    texto: "Acabamento premium e durável.",
+    icon: '⭐',
+    titulo: 'Garantia de qualidade',
+    texto: 'Acabamento premium e durável.',
   },
   {
-    icon: "📞",
-    titulo: "Atendimento personalizado",
-    texto: "Falamos consigo do início ao fim.",
+    icon: '📞',
+    titulo: 'Atendimento personalizado',
+    texto: 'Falamos consigo do início ao fim.',
   },
 ];
 
 const DEPOIMENTOS = [
   {
-    nome: "Maria Silva",
+    nome: 'Maria Silva',
     texto:
-      "Excelente qualidade e entrega rápida. A sala ficou exatamente como imaginávamos!",
+      'Excelente qualidade e entrega rápida. A sala ficou exatamente como imaginávamos!',
     nota: 5,
   },
   {
-    nome: "João Santos",
-    texto: "Móveis sob medida de alto padrão. Recomendo a todos!",
+    nome: 'João Santos',
+    texto: 'Móveis sob medida de alto padrão. Recomendo a todos!',
     nota: 5,
   },
   {
-    nome: "Ana Costa",
+    nome: 'Ana Costa',
     texto:
-      "Atendimento personalizado e qualidade excepcional. Minha casa está transformada!",
+      'Atendimento personalizado e qualidade excepcional. Minha casa está transformada!',
     nota: 5,
   },
 ];
 
 const FAQ_ITEMS = [
   {
-    pergunta: "Quanto tempo demora a produção?",
-    resposta: "7 a 30 dias dependendo do projeto e complexidade do móvel.",
+    pergunta: 'Quanto tempo demora a produção?',
+    resposta: '7 a 30 dias dependendo do projeto e complexidade do móvel.',
   },
   {
-    pergunta: "Fazem móveis personalizados?",
-    resposta: "Sim. Fazemos móveis sob medida conforme as suas necessidades.",
+    pergunta: 'Fazem móveis personalizados?',
+    resposta: 'Sim. Fazemos móveis sob medida conforme as suas necessidades.',
   },
   {
-    pergunta: "Entregam em todo o país?",
+    pergunta: 'Entregam em todo o país?',
     resposta:
-      "Sim, entregamos em todo Moçambique, incluindo Maputo, Beira e Nampula.",
+      'Sim, entregamos em todo Moçambique, incluindo Maputo, Beira e Nampula.',
   },
   {
-    pergunta: "Quais formas de pagamento aceitam?",
-    resposta: "Aceitamos M-Pesa, Emola e transferência bancária.",
+    pergunta: 'Quais formas de pagamento aceitam?',
+    resposta: 'Aceitamos M-Pesa, Emola e transferência bancária.',
   },
   {
-    pergunta: "Oferecem garantia?",
+    pergunta: 'Oferecem garantia?',
     resposta:
-      "Sim, todos os móveis têm garantia contra defeitos de fabricação.",
+      'Sim, todos os móveis têm garantia contra defeitos de fabricação.',
   },
 ];
 
 const GALERIA_PROJETOS = [
   {
     imagem:
-      "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1200&auto=format&fit=crop",
-    titulo: "Sala Moderna",
+      'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1200&auto=format&fit=crop',
+    titulo: 'Sala Moderna',
   },
   {
     imagem:
-      "https://images.unsplash.com/photo-1616137466211-f939a420be84?q=80&w=1200&auto=format&fit=crop",
-    titulo: "Quarto Master",
+      'https://images.unsplash.com/photo-1616137466211-f939a420be84?q=80&w=1200&auto=format&fit=crop',
+    titulo: 'Quarto Master',
   },
   {
     imagem:
-      "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?q=80&w=1200&auto=format&fit=crop",
-    titulo: "Sala de Jantar",
+      'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?q=80&w=1200&auto=format&fit=crop',
+    titulo: 'Sala de Jantar',
   },
   {
     imagem:
-      "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop",
-    titulo: "Cozinha Integrada",
+      'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop',
+    titulo: 'Cozinha Integrada',
   },
   {
     imagem:
-      "https://images.unsplash.com/photo-1600210492493-0946911123ea?q=80&w=1200&auto=format&fit=crop",
-    titulo: "Quarto Infantil",
+      'https://images.unsplash.com/photo-1600210492493-0946911123ea?q=80&w=1200&auto=format&fit=crop',
+    titulo: 'Quarto Infantil',
   },
   {
     imagem:
-      "https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=1200&auto=format&fit=crop",
-    titulo: "Sala Luxo",
+      'https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=1200&auto=format&fit=crop',
+    titulo: 'Sala Luxo',
   },
 ];
 
-const WHATSAPP_NUMERO = "258843792635";
+const WHATSAPP_NUMERO = '258843792635';
 
 const REDES_SOCIAIS = [
   {
-    nome: "Instagram",
-    href: "https://instagram.com/sweetlar.mz",
+    nome: 'Instagram',
+    href: 'https://instagram.com/sweetlar.mz',
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
         <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
@@ -163,8 +163,8 @@ const REDES_SOCIAIS = [
     ),
   },
   {
-    nome: "Facebook",
-    href: "https://facebook.com/sweetlar.mz",
+    nome: 'Facebook',
+    href: 'https://facebook.com/sweetlar.mz',
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
@@ -172,8 +172,8 @@ const REDES_SOCIAIS = [
     ),
   },
   {
-    nome: "TikTok",
-    href: "https://tiktok.com/@sweetlar.mz",
+    nome: 'TikTok',
+    href: 'https://tiktok.com/@sweetlar.mz',
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
         <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
@@ -181,8 +181,8 @@ const REDES_SOCIAIS = [
     ),
   },
   {
-    nome: "Twitter/X",
-    href: "https://twitter.com/sweetlar_mz",
+    nome: 'Twitter/X',
+    href: 'https://twitter.com/sweetlar_mz',
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -200,36 +200,36 @@ type CarrinhoItem = {
   tipo: string;
 };
 
-const parsePrecoProduto = (preco: number | string) =>
+const parsePrecoProduto = (preco: string) =>
   Number(
-    String(preco)
-      .replace(/\./g, "")
-      .replace(",", ".")
-      .replace(/[^\d.]/g, ""),
+    preco
+      .replace(/\./g, '')
+      .replace(',', '.')
+      .replace(/[^\d.]/g, ''),
   );
 
 const normalizarCarrinhoSalvo = (value: unknown): CarrinhoItem[] => {
   if (!Array.isArray(value)) return [];
   return value.flatMap((item) => {
-    if (!item || typeof item !== "object") return [];
+    if (!item || typeof item !== 'object') return [];
     const cartItem = item as Partial<CarrinhoItem>;
-    if (typeof cartItem.id !== "number") return [];
+    if (typeof cartItem.id !== 'number') return [];
     const produto = PRODUTOS_DATABASE.find((p) => p.id === cartItem.id);
     if (!produto) return [];
     return [
       {
         id: cartItem.id,
         quantidade:
-          typeof cartItem.quantidade === "number" && cartItem.quantidade > 0
+          typeof cartItem.quantidade === 'number' && cartItem.quantidade > 0
             ? cartItem.quantidade
             : 1,
         preco:
-          typeof cartItem.preco === "number" && cartItem.preco > 0
+          typeof cartItem.preco === 'number' && cartItem.preco > 0
             ? cartItem.preco
             : parsePrecoProduto(String(produto.precoMinimo)),
-        tamanho: cartItem.tamanho ?? "",
-        cor: cartItem.cor ?? "",
-        tipo: cartItem.tipo ?? "",
+        tamanho: cartItem.tamanho ?? '',
+        cor: cartItem.cor ?? '',
+        tipo: cartItem.tipo ?? '',
       },
     ];
   });
@@ -239,7 +239,7 @@ const getCarrinhoItemKey = (item: CarrinhoItem) =>
   `${item.id}-${item.preco}-${item.tamanho}-${item.cor}-${item.tipo}`;
 
 const money = (value: number) =>
-  `${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })} MT`;
+  `${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} MT`;
 
 type CardProdutoProps = {
   item: Produto;
@@ -263,6 +263,7 @@ const CardProduto = ({
         src={item.imagemPadrao}
         alt={item.nome}
         fill
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         className="object-contain p-4 transition-transform duration-300 group-hover:scale-105"
       />
       <button
@@ -273,7 +274,7 @@ const CardProduto = ({
         }}
         aria-label="Adicionar aos favoritos"
         className={`absolute right-2 top-2 rounded-full bg-white p-2 shadow-md ${
-          favoritos.includes(item.id) ? "text-red-500" : "text-zinc-400"
+          favoritos.includes(item.id) ? 'text-red-500' : 'text-zinc-400'
         }`}
       >
         ❤️
@@ -320,7 +321,7 @@ const CardProduto = ({
         }}
         className="rounded-xl border border-zinc-200 px-3 py-2.5 text-sm hover:border-sky-500"
       >
-        {favoritos.includes(item.id) ? "♥" : "♡"}
+        {favoritos.includes(item.id) ? '♥' : '♡'}
       </button>
     </div>
   </div>
@@ -340,8 +341,8 @@ const MenuSecoes = ({ categoriaAtiva, onSelecionar }: MenuSecoesProps) => (
         onClick={() => onSelecionar(cat)}
         className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
           categoriaAtiva === cat
-            ? "bg-sky-500 text-white"
-            : "border border-zinc-200 bg-white text-zinc-600 hover:border-sky-500"
+            ? 'bg-sky-500 text-white'
+            : 'border border-zinc-200 bg-white text-zinc-600 hover:border-sky-500'
         }`}
       >
         {cat}
@@ -386,6 +387,7 @@ const PaginaHome = ({
           src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1600&auto=format&fit=crop"
           alt="Background"
           fill
+          sizes="100vw"
           className="object-cover"
           priority
         />
@@ -405,8 +407,8 @@ const PaginaHome = ({
             type="button"
             onClick={() =>
               document
-                .getElementById("grid-produtos")
-                ?.scrollIntoView({ behavior: "smooth" })
+                .getElementById('grid-produtos')
+                ?.scrollIntoView({ behavior: 'smooth' })
             }
             className="rounded-xl bg-sky-500 px-6 py-3 text-sm font-medium text-white"
           >
@@ -639,8 +641,8 @@ const PaginaHome = ({
             type="button"
             onClick={() =>
               document
-                .getElementById("grid-produtos")
-                ?.scrollIntoView({ behavior: "smooth" })
+                .getElementById('grid-produtos')
+                ?.scrollIntoView({ behavior: 'smooth' })
             }
             className="rounded-xl border border-white/30 bg-sky-600 px-8 py-4 font-bold text-white transition-all hover:bg-sky-700"
           >
@@ -654,18 +656,18 @@ const PaginaHome = ({
 
 export default function Home() {
   const [categoriaAtiva, setCategoriaAtiva] =
-    useState<(typeof CATEGORIAS)[number]>("Todos");
+    useState<(typeof CATEGORIAS)[number]>('Todos');
   const [produtoSelecionadoId, setProdutoSelecionadoId] = useState<
     number | null
   >(null);
-  const [buscaTermo, setBuscaTermo] = useState("");
+  const [buscaTermo, setBuscaTermo] = useState('');
 
   // ✅ Initializer functions: lêem o localStorage apenas uma vez, no cliente,
   // sem precisar de useEffect nem setState dentro de efeito.
   const [favoritos, setFavoritos] = useState<number[]>(() => {
-    if (typeof window === "undefined") return [];
+    if (typeof window === 'undefined') return [];
     try {
-      const saved = localStorage.getItem("sweetlar-favorites");
+      const saved = localStorage.getItem('sweetlar-favorites');
       return saved ? (JSON.parse(saved) as number[]) : [];
     } catch {
       return [];
@@ -673,9 +675,9 @@ export default function Home() {
   });
 
   const [carrinho, setCarrinho] = useState<CarrinhoItem[]>(() => {
-    if (typeof window === "undefined") return [];
+    if (typeof window === 'undefined') return [];
     try {
-      const saved = localStorage.getItem("sweetlar-cart");
+      const saved = localStorage.getItem('sweetlar-cart');
       return saved ? normalizarCarrinhoSalvo(JSON.parse(saved)) : [];
     } catch {
       return [];
@@ -684,13 +686,13 @@ export default function Home() {
 
   const [quantidade, setQuantidade] = useState(1);
   const [tamanhoSelecionado, setTamanhoSelecionado] =
-    useState<(typeof TABELA_PRECOS_CAMAS.tamanhos)[number]>("Casal");
+    useState<(typeof TABELA_PRECOS_CAMAS.tamanhos)[number]>('Casal');
   const [tipoSelecionado, setTipoSelecionado] =
-    useState<keyof typeof TABELA_PRECOS_CAMAS.componentes>("Base e encosto");
-  const [corSelecionada, setCorSelecionada] = useState("Cinza");
+    useState<keyof typeof TABELA_PRECOS_CAMAS.componentes>('Base e encosto');
+  const [corSelecionada, setCorSelecionada] = useState('Cinza');
   const [incluirCabeceira, setIncluirCabeceira] = useState(false);
   const [incluirColchao, setIncluirColchao] = useState(false);
-  const [imagemExibida, setImagemExibida] = useState("");
+  const [imagemExibida, setImagemExibida] = useState('');
   const [lupaAtiva, setLupaAtiva] = useState(false);
   const [lupaPosicao, setLupaPosicao] = useState({ x: 50, y: 50 });
 
@@ -698,9 +700,9 @@ export default function Home() {
     updater: CarrinhoItem[] | ((prev: CarrinhoItem[]) => CarrinhoItem[]),
   ) => {
     setCarrinho((prev) => {
-      const next = typeof updater === "function" ? updater(prev) : updater;
-      if (typeof window !== "undefined")
-        localStorage.setItem("sweetlar-cart", JSON.stringify(next));
+      const next = typeof updater === 'function' ? updater(prev) : updater;
+      if (typeof window !== 'undefined')
+        localStorage.setItem('sweetlar-cart', JSON.stringify(next));
       return next;
     });
   };
@@ -709,9 +711,9 @@ export default function Home() {
     updater: number[] | ((prev: number[]) => number[]),
   ) => {
     setFavoritos((prev) => {
-      const next = typeof updater === "function" ? updater(prev) : updater;
-      if (typeof window !== "undefined")
-        localStorage.setItem("sweetlar-favorites", JSON.stringify(next));
+      const next = typeof updater === 'function' ? updater(prev) : updater;
+      if (typeof window !== 'undefined')
+        localStorage.setItem('sweetlar-favorites', JSON.stringify(next));
       return next;
     });
   };
@@ -723,9 +725,9 @@ export default function Home() {
   const produtosFiltrados = useMemo(() => {
     return PRODUTOS_DATABASE.filter((p) => {
       const matchCategoria =
-        categoriaAtiva === "Todos" || p.categoria === categoriaAtiva;
+        categoriaAtiva === 'Todos' || p.categoria === categoriaAtiva;
       const matchBusca =
-        buscaTermo.trim() === "" ||
+        buscaTermo.trim() === '' ||
         p.nome.toLowerCase().includes(buscaTermo.toLowerCase());
       return matchCategoria && matchBusca;
     });
@@ -739,9 +741,9 @@ export default function Home() {
   }, [produtoAtual]);
 
   const produtosMaisVendidos = PRODUTOS_DATABASE.filter(
-    (p) => p.tag === "Mais Vendido",
+    (p) => p.tag === 'Mais Vendido',
   );
-  const produtosNovidades = PRODUTOS_DATABASE.filter((p) => p.tag === "Novo");
+  const produtosNovidades = PRODUTOS_DATABASE.filter((p) => p.tag === 'Novo');
 
   const calcularPrecoCama = () => {
     let total = 0;
@@ -754,14 +756,14 @@ export default function Home() {
   };
 
   const getPrecoProduto = () => {
-    if (!produtoAtual) return "";
-    if (produtoAtual.categoria === "Camas") return money(calcularPrecoCama());
+    if (!produtoAtual) return '';
+    if (produtoAtual.categoria === 'Camas') return money(calcularPrecoCama());
     return produtoAtual.precoMinimo;
   };
 
   const tratarMudancaDeCor = (novaCor: string) => {
     setCorSelecionada(novaCor);
-    if (produtoAtual?.categoria === "Camas") {
+    if (produtoAtual?.categoria === 'Camas') {
       const foto = FOTOS_CAMA_POR_COR[novaCor];
       setImagemExibida(foto || produtoAtual.imagemPadrao);
     }
@@ -781,17 +783,17 @@ export default function Home() {
     const prod = PRODUTOS_DATABASE.find((p) => p.id === id);
     setProdutoSelecionadoId(id);
     if (prod) {
-      setCorSelecionada(prod.cores?.[0] || "Cinza");
+      setCorSelecionada(prod.cores?.[0] || 'Cinza');
       setImagemExibida(
-        prod.categoria === "Camas"
-          ? FOTOS_CAMA_POR_COR[prod.cores?.[0] || "Cinza"] || prod.imagemPadrao
+        prod.categoria === 'Camas'
+          ? FOTOS_CAMA_POR_COR[prod.cores?.[0] || 'Cinza'] || prod.imagemPadrao
           : prod.imagemPadrao,
       );
       setQuantidade(1);
       setIncluirCabeceira(false);
       setIncluirColchao(false);
-      setTamanhoSelecionado("Casal");
-      setTipoSelecionado("Base e encosto");
+      setTamanhoSelecionado('Casal');
+      setTipoSelecionado('Base e encosto');
     }
   };
 
@@ -807,12 +809,12 @@ export default function Home() {
       id: produtoAtual.id,
       quantidade,
       preco:
-        produtoAtual.categoria === "Camas"
+        produtoAtual.categoria === 'Camas'
           ? calcularPrecoCama()
-          : parsePrecoProduto(Number(produtoAtual.precoMinimo)),
-      tamanho: produtoAtual.categoria === "Camas" ? tamanhoSelecionado : "",
+          : parsePrecoProduto(String(produtoAtual.precoMinimo)),
+      tamanho: produtoAtual.categoria === 'Camas' ? tamanhoSelecionado : '',
       cor: corSelecionada,
-      tipo: produtoAtual.categoria === "Camas" ? tipoSelecionado : "",
+      tipo: produtoAtual.categoria === 'Camas' ? tipoSelecionado : '',
     };
     setCarrinhoComPersistencia((prev) => {
       const isMesmoItem = (item: CarrinhoItem) =>
@@ -847,13 +849,13 @@ export default function Home() {
   };
 
   const whatsappMensagemGeral = encodeURIComponent(
-    "Olá SweetLar,\n\nGostaria de receber um orçamento.",
+    'Olá SweetLar,\n\nGostaria de receber um orçamento.',
   );
   const whatsappMensagem = produtoAtual
     ? encodeURIComponent(
         `Olá SweetLar,\n\nProduto: ${produtoAtual.nome}\nPreço: ${getPrecoProduto()}\nCor: ${corSelecionada}\nQuantidade: ${quantidade}\n\nGostaria de receber um orçamento.`,
       )
-    : "";
+    : '';
 
   return (
     <div className="min-h-screen bg-zinc-50/50 font-sans text-zinc-800 antialiased">
@@ -864,8 +866,8 @@ export default function Home() {
             className="cursor-pointer text-2xl font-black tracking-tight text-zinc-900"
             onClick={() => {
               setProdutoSelecionadoId(null);
-              setCategoriaAtiva("Todos");
-              setBuscaTermo("");
+              setCategoriaAtiva('Todos');
+              setBuscaTermo('');
             }}
           >
             <span className="text-sky-500">Sweet</span>Lar
@@ -944,11 +946,11 @@ export default function Home() {
                   style={{
                     left: `${lupaPosicao.x}%`,
                     top: `${lupaPosicao.y}%`,
-                    transform: "translate(-50%, -50%)",
+                    transform: 'translate(-50%, -50%)',
                     backgroundImage: `url("${imagemExibida || produtoAtual.imagemPadrao}")`,
                     backgroundPosition: `${lupaPosicao.x}% ${lupaPosicao.y}%`,
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "260%",
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: '260%',
                   }}
                 />
               )}
@@ -987,7 +989,7 @@ export default function Home() {
                     </div>
                   )}
 
-                  {produtoAtual.categoria === "Camas" && (
+                  {produtoAtual.categoria === 'Camas' && (
                     <>
                       <div>
                         <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-zinc-400">
@@ -1064,7 +1066,7 @@ export default function Home() {
                             Adicionar Colchão Medicinal (+
                             {TABELA_PRECOS_CAMAS.colchoes[
                               tamanhoSelecionado
-                            ].toLocaleString("pt-BR")}{" "}
+                            ].toLocaleString('pt-BR')}{' '}
                             MT)
                           </span>
                         </label>
@@ -1199,13 +1201,13 @@ export default function Home() {
                     <p className="text-xs text-zinc-400">
                       {[item.cor, item.tamanho, item.tipo]
                         .filter(Boolean)
-                        .join(" · ")}
+                        .join(' · ')}
                     </p>
                   </div>
                   <div className="shrink-0 text-right">
                     <span className="text-zinc-500">x{item.quantidade}</span>
                     <p className="text-xs font-semibold text-zinc-700">
-                      {item.preco.toLocaleString("pt-BR")} MT
+                      {item.preco.toLocaleString('pt-BR')} MT
                     </p>
                     <button
                       type="button"
@@ -1222,7 +1224,7 @@ export default function Home() {
         </div>
         <div className="mt-3 flex items-center justify-between text-sm font-bold">
           <span>Total</span>
-          <span>{totalCarrinho.toLocaleString("pt-BR")} MT</span>
+          <span>{totalCarrinho.toLocaleString('pt-BR')} MT</span>
         </div>
       </aside>
 
@@ -1258,15 +1260,15 @@ export default function Home() {
                 Produtos
               </h4>
               <ul className="space-y-2 text-sm text-zinc-400">
-                {["Camas", "Sofás", "Cabeceiras", "Cadeiras"].map((cat) => (
+                {['Camas', 'Sofás', 'Cabeceiras', 'Cadeiras'].map((cat) => (
                   <li key={cat}>
                     <button
                       type="button"
                       className="transition-colors hover:text-white"
                       onClick={() =>
                         document
-                          .getElementById("grid-produtos")
-                          ?.scrollIntoView({ behavior: "smooth" })
+                          .getElementById('grid-produtos')
+                          ?.scrollIntoView({ behavior: 'smooth' })
                       }
                     >
                       {cat}
@@ -1308,7 +1310,7 @@ export default function Home() {
         <div className="border-t border-zinc-800 py-6">
           <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 text-xs text-zinc-600 sm:flex-row sm:px-6 lg:px-8">
             <span>
-              © 2026 SoluçõesMoçambique. Todos os direitos reservados.
+              © 2026 SweetLar Moçambique. Todos os direitos reservados.
             </span>
             <div className="flex gap-4">
               {REDES_SOCIAIS.map((rede) => (
